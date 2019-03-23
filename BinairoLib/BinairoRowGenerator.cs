@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+
+[assembly: InternalsVisibleTo("BinairoLib.Tests")]
 
 namespace BinairoLib
 {
-  public class BinairyRowGenerator
+  public class BinairoRowGenerator
   {
     const byte zero = 0b0000_0000;
     const byte one = 0b0000_0001;
@@ -27,8 +30,13 @@ namespace BinairoLib
       }
       return zeros == ones;
     }
-    public uint[] GenerateAllValid(int size)
+
+    public ushort[] GenerateAllValid(int size)
     {
+      if (size > 12 )
+      {
+        throw new ArgumentException(message: "This method supports up to size = 12");
+      }
       var results = new List<byte[]>();
       byte[] row = new byte[size];
       for (byte pos0 = zero; pos0 <= one; pos0 += 1)
@@ -111,6 +119,30 @@ namespace BinairoLib
                               {
                                 results.Add(row);
                                 row = (byte[])row.Clone();
+                              }
+                              else
+                              {
+                                for (byte pos10 = zero; pos10 <= one; pos10 += 1)
+                                {
+                                  if (pos10 == row[9] && pos10 == row[8])
+                                  {
+                                    continue;
+                                  }
+                                  row[10] = pos10;
+                                  for (byte pos11 = zero; pos11 <= one; pos11 += 1)
+                                  {
+                                    if (pos11 == row[10] && pos11 == row[9])
+                                    {
+                                      continue;
+                                    }
+                                    row[11] = pos11;
+                                    if (size == 12)
+                                    {
+                                      results.Add(row);
+                                      row = (byte[])row.Clone();
+                                    }
+                                  }
+                                }
                               }
                             }
                           }

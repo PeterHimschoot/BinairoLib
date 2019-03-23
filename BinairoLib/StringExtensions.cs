@@ -6,9 +6,9 @@ namespace BinairoLib
 {
   public static class StringExtensions
   {
-    public static string ToBinaryString(this uint nr)
+    public static string ToBinaryString(this ushort nr)
     {
-      const uint mask = 0b1000_0000_0000_0000;
+      const ushort mask = 0b1000_0000_0000_0000;
       StringBuilder bob = new StringBuilder();
       for(int i = 0; i < 16; i += 1)
       {

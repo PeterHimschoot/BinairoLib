@@ -10,25 +10,24 @@ namespace XUnitTestProject1
     const byte zero = 0b0000_0000;
     const byte one = 0b0000_0001;
 
-    public static IEnumerable<object[]> MemberData
+    public static IEnumerable<object[]> TestData
     {
       get
       {
         yield return new object[] {
           new byte [] { zero, one, one, zero, one, zero, zero, one },
-          (uint)0b0110_1001
+          (ushort)0b0110_1001_0000_0000
         };
       }
     }
     
     [Theory]
-    [MemberData(nameof(MemberData))]
-    public void ConvertCorrectly(byte[] row, uint expected)
+    [MemberData(nameof(TestData))]
+    public void ConvertCorrectly(byte[] row, ushort expected)
     {
       var converter = new ArrayToRowConverter();
       var result = converter.Convert(row, 8);
       Assert.Equal(expected, result);
-
     }
   }
 }

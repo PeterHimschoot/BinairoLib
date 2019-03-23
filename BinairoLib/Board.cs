@@ -3,56 +3,26 @@ using System.Runtime;
 
 namespace BinairoLib
 {
-  [Flags]
-  public enum Stone : byte
-  {
-    Blank = 0b00,
-    Zero = 0b01,
-    One = 0b10
-  }
-
   public class Board
   {
-    public int Size { get; }
-    public int sqSize { get; }
-    private Stone[] stones;
+    const byte zero = 0b0000_0000;
+    const byte one = 0b0000_0001;
 
-    public Board(int size)
+    public int Size { get; }
+
+    private ushort[] rows;
+    private ushort[] mask;
+    private RowChecker checker;
+
+    public Board(int size, RowChecker checker)
     {
       this.Size = size;
-      this.sqSize = size * size;
-      this.stones = new Stone[sqSize];
-      Clear();
+      this.rows = new ushort[size];
+      this.mask = new ushort[size];
+      this.checker = checker;
     }
 
-    public void Clear()
-    {
-      Span<Stone> sp = new Span<Stone>(stones);
-      for (int i = 0; i < this.sqSize; i += 1)
-      {
-        sp[i] = Stone.Blank;
-      }
-    }
-
-    //public Stone this[int row, int col]
-    //{
-    //  get => stones[row, col];
-    //  set => stones[row, col] = value;
-    //}
-
-    public bool IsValid() => Constraint1();
-
-    private bool Constraint1()
-    {
-      Span<Stone> sp = new Span<Stone>(stones);
-      for (int iRow = 0; iRow < this.Size; iRow += 1)
-      {
-        for(int iCol = 0; iCol < this.Size-3; iCol +=1)
-        {
-
-        }
-      }
-      return true;
-    }
+    public bool IsValid() 
+      => checker.IsValid(rows, mask);
   }
 }
