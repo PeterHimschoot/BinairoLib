@@ -8,4 +8,10 @@ namespace BinairoLib.Tests
   {
     public Valid6X6() : base(new BinairoRowGenerator(), 6) { }
   }
+
+  public class Valid14x14 : BinairoRows
+  {
+    public Valid14x14() : base(new BinairoRowGenerator(), 14) { }
+  }
+
 }

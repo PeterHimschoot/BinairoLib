@@ -83,7 +83,7 @@ namespace BinairoLib.Tests
     [MemberData(nameof(SomeValidRowsWithMasks))]
     public void RecognizeValidRows(ushort row, ushort mask)
     {
-      var boardChecker = new RowChecker(validRows, size: 6);
+      var boardChecker = new BinairoRowChecker(validRows, size: 6);
       Assert.True(boardChecker.IsValid(row, mask));
     }
 
@@ -91,7 +91,7 @@ namespace BinairoLib.Tests
     [MemberData(nameof(SomeInvalidRowsWithMasks))]
     public void RecognizeInvalidRows(ushort row, ushort mask)
     {
-      var boardChecker = new RowChecker(validRows, size: 6);
+      var boardChecker = new BinairoRowChecker(validRows, size: 6);
       Assert.False(boardChecker.IsValid(row, mask));
     }
 
@@ -99,7 +99,7 @@ namespace BinairoLib.Tests
     [MemberData(nameof(SomeValidBoards))]
     public void RecognizeValidBoards(ushort[] board, ushort[] mask)
     {
-      var boardChecker = new RowChecker(validRows, size: 6);
+      var boardChecker = new BinairoRowChecker(validRows, size: 6);
       Assert.True(boardChecker.IsValid(board, mask));
     }
 
@@ -107,7 +107,7 @@ namespace BinairoLib.Tests
     [MemberData(nameof(SomeInvalidBoards))]
     public void RecognizeInvalidBoards(ushort[] board, ushort[] mask)
     {
-      var boardChecker = new RowChecker(validRows, size: 6);
+      var boardChecker = new BinairoRowChecker(validRows, size: 6);
       Assert.False(boardChecker.IsValid(board, mask));
     }
   }

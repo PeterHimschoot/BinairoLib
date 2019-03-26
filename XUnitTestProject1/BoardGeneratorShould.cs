@@ -17,9 +17,9 @@ namespace BinairoLib.Tests
     {
       Debug.WriteLine($"Generating all boards for size {size}.");
       var validRows = new BinairoRows(new BinairoRowGenerator(), size);
-      var rowChecker = new RowChecker(validRows, size);
+      var rowChecker = new BinairoRowChecker(validRows, size);
       var flipper = new MatrixFlipper();
-      var checker = new BoardChecker(rowChecker, flipper, size);
+      var checker = new BinairoBoardChecker(rowChecker, flipper, size);
       var sut = new BoardGenerator(checker, validRows, size);
       //var boardPrinter = new BoardPrinter();
       var allBoards = sut.GenerateAllBoards(); // .Take(1000);

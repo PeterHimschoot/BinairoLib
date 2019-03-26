@@ -4,15 +4,15 @@ using System.Text;
 
 namespace BinairoLib
 {
-  public class BoardChecker
+  public class BinairoBoardChecker
   {
-    private readonly RowChecker rowChecker;
+    private readonly BinairoRowChecker rowChecker;
     private readonly MatrixFlipper flipper;
     private readonly int size;
     private ushort[] columns;
     private ushort[] columnMasks;
 
-    public BoardChecker(RowChecker rowChecker, MatrixFlipper flipper, int size)
+    public BinairoBoardChecker(BinairoRowChecker rowChecker, MatrixFlipper flipper, int size)
     {
       this.rowChecker = rowChecker;
       this.flipper = flipper;

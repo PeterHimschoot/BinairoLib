@@ -12,6 +12,7 @@ namespace BinairoLib.Tests
     [InlineData(8)]
     [InlineData(10)]
     [InlineData(12)]
+    [InlineData(14)]
     public void GenerateSize(int size)
     {
       BinairoRowGenerator brg = new BinairoRowGenerator();

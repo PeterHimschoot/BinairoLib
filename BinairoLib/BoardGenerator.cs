@@ -9,11 +9,11 @@ namespace BinairoLib
   {
     private readonly BinairoRows validRows;
     private readonly int size;
-    private readonly BoardChecker checker;
+    private readonly BinairoBoardChecker checker;
     private readonly ushort[] fullMask;
     BoardGeneratorStrategy strategy;
 
-    public BoardGenerator(BoardChecker checker, BinairoRows validRows, int size)
+    public BoardGenerator(BinairoBoardChecker checker, BinairoRows validRows, int size)
     {
       this.validRows = validRows;
       this.size = size;
@@ -46,11 +46,11 @@ namespace BinairoLib
 
     class BoardGenerator6x6 : BoardGeneratorStrategy
     {
-      private BoardChecker boardChecker;
+      private BinairoBoardChecker boardChecker;
       private BinairoRows validRows;
       private ushort[] fullMask;
 
-      public BoardGenerator6x6(BinairoRows validRows, BoardChecker boardChecker, ushort[] fullMask)
+      public BoardGenerator6x6(BinairoRows validRows, BinairoBoardChecker boardChecker, ushort[] fullMask)
       {
         this.boardChecker = boardChecker;
         this.validRows = validRows;
@@ -115,11 +115,11 @@ namespace BinairoLib
     }
     class BoardGenerator8x8 : BoardGeneratorStrategy
     {
-      private BoardChecker boardChecker;
+      private BinairoBoardChecker boardChecker;
       private BinairoRows validRows;
       private ushort[] fullMask;
 
-      public BoardGenerator8x8(BinairoRows validRows, BoardChecker boardChecker, ushort[] fullMask)
+      public BoardGenerator8x8(BinairoRows validRows, BinairoBoardChecker boardChecker, ushort[] fullMask)
       {
         this.boardChecker = boardChecker;
         this.validRows = validRows;

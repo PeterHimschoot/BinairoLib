@@ -33,9 +33,9 @@ namespace BinairoLib
 
     public ushort[] GenerateAllValid(int size)
     {
-      if (size > 12 )
+      if (size > 14)
       {
-        throw new ArgumentException(message: "This method supports up to size = 12");
+        throw new ArgumentException(message: "This method supports up to size = 14");
       }
       var results = new List<byte[]>();
       byte[] row = new byte[size];
@@ -140,6 +140,27 @@ namespace BinairoLib
                                     {
                                       results.Add(row);
                                       row = (byte[])row.Clone();
+                                    }
+                                    else
+                                    {
+                                      for (byte pos12 = zero; pos12 <= one; pos12 += 1)
+                                      {
+                                        if (pos12 == row[11] && pos12 == row[10])
+                                        {
+                                          continue;
+                                        }
+                                        row[12] = pos12;
+                                        for (byte pos13 = zero; pos13 <= one; pos13 += 1)
+                                        {
+                                          if (pos13 == row[12] && pos13 == row[11])
+                                          {
+                                            continue;
+                                          }
+                                          row[13] = pos13;
+                                          results.Add(row);
+                                          row = (byte[])row.Clone();
+                                        }
+                                      }
                                     }
                                   }
                                 }

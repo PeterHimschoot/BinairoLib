@@ -12,9 +12,9 @@ namespace BinairoLib
 
     private ushort[] rows;
     private ushort[] mask;
-    private RowChecker checker;
+    private BinairoRowChecker checker;
 
-    public Board(int size, RowChecker checker)
+    public Board(int size, BinairoRowChecker checker)
     {
       this.Size = size;
       this.rows = new ushort[size];

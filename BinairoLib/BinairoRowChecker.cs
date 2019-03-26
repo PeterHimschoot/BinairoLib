@@ -4,13 +4,13 @@ using System.Text;
 
 namespace BinairoLib
 {
-  public class RowChecker
+  public class BinairoRowChecker
   {
     private readonly BinairoRows validRows;
     private readonly int validRowsLength;
     private readonly int size;
 
-    public RowChecker(BinairoRows validRows, int size)
+    public BinairoRowChecker(BinairoRows validRows, int size)
     {
       this.validRows = validRows;
       this.validRowsLength = validRows.Length;

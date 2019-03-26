@@ -31,7 +31,6 @@ namespace BinairoLib
         // Move all bits to the most left position
         result[i] <<= (16 - size);
       }
-
     }
   }
 }
