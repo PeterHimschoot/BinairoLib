@@ -17,8 +17,6 @@ namespace BinairoLib.Tests
     {
       get
       {
-        // Before: 00XX_XXXX_XXXX_XXXX
-        // After : 001X_XXXX_XXXX_XXXX
         yield return new object[] {
           0b0011_0100_0000_0000, // row
           0b1111_1101_0000_0000, // mask
@@ -26,13 +24,22 @@ namespace BinairoLib.Tests
           0b1111_1111_0000_0000, // expectedMask
           true
         };
-        // Before: 11XX_XXXX_XXXX_XXXX
-        // After : 110X_XXXX_XXXX_XXXX
+        // 1100011X
+        // 11000110
         yield return new object[] {
-          0b1100_0110_0000_0000, // row
+          0b1100_1010_0000_0000, // row
           0b1111_1110_0000_0000, // mask
-          0b1100_0110_0000_0000, // expectedRow
+          0b1100_1010_0000_0000, // expectedRow
           0b1111_1111_0000_0000, // expectedMask
+          true
+        };
+        // 1XX0011X
+        // 1XX00110
+        yield return new object[] {
+          0b1000_0110_0000_0000, // row
+          0b1001_1110_0000_0000, // mask
+          0b1000_0110_0000_0000, // expectedRow
+          0b1001_1111_0000_0000, // expectedMask
           true
         };
       }
@@ -40,7 +47,7 @@ namespace BinairoLib.Tests
 
     [Theory]
     [MemberData(nameof(IncompleteRows))]
-    public void SolveDuosCorrectly(ushort row, ushort mask, ushort expectedRow, ushort expectedMask, bool expectedSolved)
+    public void SolveMissingOneCorrectly(ushort row, ushort mask, ushort expectedRow, ushort expectedMask, bool expectedSolved)
     {
       var sut = new LastMissingSolver();
 

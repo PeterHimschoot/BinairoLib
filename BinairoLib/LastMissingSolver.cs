@@ -13,24 +13,30 @@ namespace BinairoLib
 
     public bool Solve(ref ushort row, ref ushort mask, int size)
     {
-      ushort missingBit = (ushort) (0b1000_0000_0000_0000 >> (size-1));
-      ushort missingMask = (size-1).ToMask();
+      int ones = counter.CountOnes(row, size, mask, includeHoles: true);
+      int zeros = counter.CountZeros(row, size, mask, includeHoles: true);
       ushort sizeMask = size.ToMask();
-
-      for (int i = 0; i < size; i += 1)
+      if (ones + zeros + 1 == size)
       {
-        if (mask == missingMask)
+        // we have a match, now find the missing element
+        ushort missingPattern = 0b1010_0000_0000_0000;
+        ushort missingMask = 0b1110_0000_0000_0000;
+        for (int i = 0; i < size; i += 1)
         {
-          var ones = counter.CountOnes(row, size);
-          if (ones < size / 2)
+          if ((mask & missingMask) == missingPattern)
           {
-            row |= (ushort)(~missingMask & sizeMask);
+            // we found the missing element!
+            ushort missingBit = (ushort)(0b1000_0000_0000_0000 >> i + 1);
+            if (ones < zeros)
+            {
+              row |= missingBit;
+            }
+            mask |= missingBit;
+            return true;
           }
-          mask |= (ushort)(~missingMask & sizeMask);
-          // found it!
-          return true;
+          missingPattern = (ushort) ((missingPattern >> 1) & sizeMask);
+          missingMask = (ushort) ((missingMask >> 1) & sizeMask);
         }
-        missingMask = (ushort)((missingMask <<= 1) | missingBit);
       }
       return false;
     }
