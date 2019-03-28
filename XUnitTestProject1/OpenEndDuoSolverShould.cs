@@ -44,6 +44,14 @@ namespace BinairoLib.Tests
           0b1110_0111_0000_0000, // expectedMask
           true
         };
+        // Before : XX001X1XX01100XX
+        yield return new object[] {
+          0b0000_1010_0011_0000, // row
+          0b0011_1010_0111_1100, // mask
+          0b0000_1010_0011_0000, // expectedRow
+          0b0011_1010_0111_1100, // expectedMask
+          false
+        };
       }
     }
 

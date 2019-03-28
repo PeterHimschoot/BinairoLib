@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 
 namespace BinairoLib
 {
@@ -41,11 +42,13 @@ namespace BinairoLib
           bool solving = true;
           while (solving)
           {
+            solving = false;
             for (int iRow = 0; iRow < size; iRow += 1)
             {
-              solving = rowSolver.Solve(ref rows[iRow], ref masks[iRow], size);
-              if (solving) rowSolvers += 1;
+              Debug.WriteLine($"{iRow} - ROW {rows[iRow].ToBinaryString(masks[iRow])}");
+              solving = solving || rowSolver.Solve(ref rows[iRow], ref masks[iRow], size);
             }
+            if (solving) rowSolvers += 1;
           }
           // Solve columns
           flipper.Flip(rows, ref columns, size);
@@ -53,16 +56,17 @@ namespace BinairoLib
           solving = true;
           while (solving)
           {
+            solving = false;
             for (int iRow = 0; iRow < size; iRow += 1)
             {
-              solving = rowSolver.Solve(ref columns[iRow], ref colMasks[iRow], size);
-              if (solving) rowSolvers += 1;
+              solving = solving || rowSolver.Solve(ref columns[iRow], ref colMasks[iRow], size);
             }
+            if (solving) rowSolvers += 1;
           }
           flipper.Flip(columns, ref rows, size);
           flipper.Flip(colMasks, ref masks, size);
-        }
         Output.PrintBoard(rows, masks, size);
+        }
         return false;
       }
       return true;
