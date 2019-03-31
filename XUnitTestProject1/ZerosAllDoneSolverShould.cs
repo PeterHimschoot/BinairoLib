@@ -18,13 +18,28 @@ namespace BinairoLib.Tests
       get
       {
         yield return new object[] {
+          "X0100110",
+          "10100110",
+          true
+        };
+        yield return new object[] {
+          "001X0110",
+          "00110110",
+          true
+        };
+        yield return new object[] {
           "001101X0",
           "00110110",
           true
         };
         yield return new object[] {
-          "01XX0100110X10",
-          "01101100110010",
+          "0011010X",
+          "00110101",
+          true
+        };
+        yield return new object[] {
+          "01XX0X00110X10",
+          "01XX0100110110",
           true
         };
       }
@@ -37,7 +52,7 @@ namespace BinairoLib.Tests
       var (row, mask, size) = rowString.ToRowWithMaskAndSize();
       var (expectedRow, expectedMask, expectedSize) = expectedString.ToRowWithMaskAndSize();
 
-      var sut = new LastMissingSolver();
+      var sut = new ZerosAllDoneSolver(new BitCounter());
 
       string problem = $"Trying to solve {rowString}";
       output.WriteLine(problem);

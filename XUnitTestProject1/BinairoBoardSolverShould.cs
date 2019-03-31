@@ -49,7 +49,6 @@ namespace BinairoLib.Tests
     [MemberData(nameof(IncompleteBoards))]
     public void SolveIncompleteBoards(string[] rowStrings)
     {
-
       var coll = rowStrings.Select(rowString => rowString.ToRowWithMaskAndSize());
       var rows = coll.Select(trio => trio.Item1).ToArray();
       var masks = coll.Select(trio => trio.Item2).ToArray();
@@ -60,10 +59,13 @@ namespace BinairoLib.Tests
       var rowChecker = new BinairoRowChecker(this.validRows, size);
       var flipper = new MatrixFlipper();
       var checker = new BinairoBoardChecker(rowChecker, flipper, size);
-      var rowSolver = new BinairoRowSolver();
+      var rowSolver = new BinairoRowSolver(size);
       var solver = new BinairoBoardSolver(checker, rowSolver, flipper, size);
       solver.Output = printer;
-      //solver.Solve(rows, masks);
+      //rowSolver.RowChecker = rowChecker;
+      //rowSolver.Output = printer;
+      var solved = solver.Solve(rows, masks);
+      Assert.True(solved);
     }
 
     [Fact]

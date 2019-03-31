@@ -6,6 +6,10 @@ namespace BinairoLib
 {
   public interface IOutputHelper
   {
-    void PrintBoard(ushort[] board, ushort[] masks, int size);
+    void PrintRow(ushort row, ushort mask, int size, string format = null);
+
+    void PrintBoard(ushort[] board, ushort[] masks, int size, bool horizontal = true);
+
+    void WarningIfNotValid();
   }
 }

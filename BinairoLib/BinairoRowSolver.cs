@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace BinairoLib
@@ -11,16 +12,23 @@ namespace BinairoLib
 
   public class BinairoRowSolver : IRowSolver
   {
-    public BinairoRowSolver()
+    private ushort allDoneMask;
+    public IOutputHelper Output { get; set; }
+    public BinairoRowChecker RowChecker { get; set; }
+
+    public BinairoRowSolver(int size)
     {
+      allDoneMask = size.ToMask();
+      BitCounter bitCounter = new BitCounter();
+
       this.Add(new OpenStartDuosSolver());
       this.Add(new OpenEndDuosSolver());
       this.Add(new HoleAtStartSolver());
       this.Add(new HoleAtEndSolver());
       this.Add(new SingleHoleSolver());
-      this.Add(new ZerosAllDoneSolver());
-      this.Add(new OnesAllDoneSolver());
-      this.Add(new LastMissingSolver());
+      this.Add(new ZerosAllDoneSolver(bitCounter));
+      this.Add(new OnesAllDoneSolver(bitCounter));
+      this.Add(new ThreeHoleSolver(bitCounter));
     }
 
     private List<IRowSolver> solvers = new List<IRowSolver>();
@@ -30,17 +38,26 @@ namespace BinairoLib
 
     public bool Solve(ref ushort row, ref ushort mask, int size)
     {
-      int solved = 0;
-      bool solving = false;
+      // Nothing to do for rows that have been solved
+      if ((mask & allDoneMask) == allDoneMask) return false;
+      // Keep track of changes
+      ushort originalMask = mask;
       do
       {
+        ushort prevMask = mask;
         foreach (var solver in solvers)
         {
-          solving = solver.Solve(ref row, ref mask, size);
-          if (solving) solved += 1;
+          Output?.PrintRow(row, mask, size, $">>>>>> {"{0}"} ({solver.GetType().FullName})");
+          bool solved =  solver.Solve(ref row, ref mask, size);
+          if (solved)
+          {
+            Output?.PrintRow(row, mask, size, $"<<<<<< {"{0}"} ({solver.GetType().FullName})");
+          }
         }
-      } while (solving);
-      return solved > 0;
+        // stop when no more changes
+        if (prevMask == mask) break;
+      } while (true);
+      return originalMask != mask; // return true if any solutions were found
     }
   }
 

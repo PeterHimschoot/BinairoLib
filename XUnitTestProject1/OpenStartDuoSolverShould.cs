@@ -35,6 +35,11 @@ namespace BinairoLib.Tests
           "X100_1X1X_X011_00",
           true
         };
+        yield return new object[] {
+        "0X1100XX01101",
+        "001100XX01101",
+          true
+        };
       }
     }
 

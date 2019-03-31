@@ -14,16 +14,24 @@ namespace BinairoLib.Tests
     public BoardPrinter(ITestOutputHelper output)
       => this.output = output;
 
-    public void PrintBoard(ushort[] board, ushort[] masks, int size)
+    public void PrintBoard(ushort[] board, ushort[] masks, int size, bool horizontal = true)
     {
-      output.WriteLine(">>> Printing board");
+      output.WriteLine($">>> Printing board {(horizontal ? "HOR" : "VER")}");
       for (int i = 0; i < size; i += 1)
       {
-        string row = board[i].ToBinaryString(masks[i]);
-        output.WriteLine(row[0..size]);
+        PrintRow(board[i], masks[i], size);
       }
       output.WriteLine("<<< Printing board");
     }
+
+    public void PrintRow(ushort row, ushort mask, int size, string format = null)
+    {
+      format = format ?? "{0}";
+      output.WriteLine(string.Format(format, row.ToBinaryString(mask)[0..size]));
+    }
+
+    public void WarningIfNotValid()
+      => output.WriteLine("*** ERROR ***"); 
 
     //private void PrintRow(ushort row, int size)
     //{

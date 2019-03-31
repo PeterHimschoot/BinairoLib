@@ -19,7 +19,7 @@ namespace BinairoLib
       ushort Zeros = 0b0000_0000_0000_0000;
       ushort UpdateMask = 0b0100_0000_0000_0000;
       // check for hole in middle
-      for (int i = 0; i < size; i += 1)
+      for (int i = 0; i < size-2; i += 1)
       {
         // mask = 101
         // Ones = 101

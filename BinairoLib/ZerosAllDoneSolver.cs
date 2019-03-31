@@ -6,16 +6,15 @@
   /// </summary>
   public class ZerosAllDoneSolver : IRowSolver
   {
-    private readonly BitCounter counter = new BitCounter();
+    private readonly BitCounter counter;
+
+    public ZerosAllDoneSolver(BitCounter bitCounter) => this.counter = bitCounter;
 
     public bool Solve(ref ushort row, ref ushort mask, int size)
     {
-      ushort sizeMask = size.ToMask();
-      if (mask == sizeMask) return false; // finished
-      int ones = this.counter.CountOnes(row, size, mask, includeHoles: true);
+      ushort originalMask = mask;
       int zeros = this.counter.CountZeros(row, size, mask, includeHoles: true);
-      int halfSize = size / 2;
-      if (zeros == halfSize)
+      if (zeros == size / 2)
       {
         // complete with '1's, skipping over holes
         ushort patternMask = 0b1111_0000_0000_0000;
@@ -29,7 +28,7 @@
           {
             ushort pattern = (ushort)(row & patternMatch);
             if (pattern == case1XX0 || pattern == case0XX1)
-            {
+            { // skip hole
               i += 3;
               patternMask >>= 4;
               patternMatch >>= 4;
@@ -45,7 +44,6 @@
             {
               row |= missingOne;
               mask |= missingOne;
-        return true;
             }
             patternMask >>= 1;
             patternMatch >>= 1;
@@ -55,7 +53,7 @@
           }
         }
       }
-      return false;
+      return originalMask != mask;
     }
   }
 }

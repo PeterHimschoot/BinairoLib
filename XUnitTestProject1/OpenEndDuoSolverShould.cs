@@ -35,6 +35,11 @@ namespace BinairoLib.Tests
            "XX00_1X1X_XX11_00",
           false
         };
+        yield return new object[] {
+          "X0X1100XX01101XX",
+          "X0X11001X01101XX",
+           true
+        };
       }
     }
 
@@ -42,9 +47,9 @@ namespace BinairoLib.Tests
     [MemberData(nameof(IncompleteRows))]
     public void SolveDuosCorrectly(string rowString, string expectedString, bool expectedSolved)
     {
-      (ushort row, ushort mask, int size) = 
+      (ushort row, ushort mask, int size) =
         rowString.ToRowWithMaskAndSize();
-      (ushort expectedRow, ushort expectedMask, int expectedSize) = 
+      (ushort expectedRow, ushort expectedMask, int expectedSize) =
         expectedString.ToRowWithMaskAndSize();
       var sut = new OpenEndDuosSolver();
 

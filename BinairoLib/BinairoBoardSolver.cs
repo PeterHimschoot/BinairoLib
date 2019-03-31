@@ -10,8 +10,7 @@ namespace BinairoLib
     private readonly BinairoBoardChecker checker;
     private readonly BinairoRowSolver rowSolver;
     private readonly MatrixFlipper flipper;
-    private ushort[] rows;
-    private ushort[] masks;
+    public int Iterations { get; set; } = int.MaxValue;
 
     public IOutputHelper Output { get; set; }
 
@@ -26,20 +25,16 @@ namespace BinairoLib
 
     public bool Solve(ushort[] rows, ushort[] masks)
     {
-      this.rows = rows;
-      this.masks = masks;
-
       ushort[] columns = new ushort[this.size];
       ushort[] colMasks = new ushort[this.size];
 
-      //int iterations = 4;
       while (!BoardIsComplete(masks))
       {
-        Output.PrintBoard(rows, masks, this.size);
         int rowSolvers = 1;
         while (rowSolvers > 0)
         {
           rowSolvers = 0;
+          Output?.PrintBoard(rows, masks, this.size);
           // Solve rows
           bool solving = true;
           while (solving)
@@ -55,10 +50,11 @@ namespace BinairoLib
               rowSolvers += 1;
             }
           }
-          Output.PrintBoard(rows, masks, this.size);
+          Output?.PrintBoard(rows, masks, this.size);
           // Solve columns
           this.flipper.Flip(rows, ref columns, this.size);
           this.flipper.Flip(masks, ref colMasks, this.size);
+          Output?.PrintBoard(columns, colMasks, this.size, horizontal: false);
           solving = true;
           while (solving)
           {
@@ -72,15 +68,18 @@ namespace BinairoLib
               rowSolvers += 1;
             }
           }
+          Output?.PrintBoard(columns, colMasks, this.size, horizontal: false);
           this.flipper.Flip(columns, ref rows, this.size);
           this.flipper.Flip(colMasks, ref masks, this.size);
-          Output.PrintBoard(rows, masks, this.size);
-          //iterations -= 1;
-          //if (iterations <= 0) return false;
+          if( ! checker.IsValid(rows, masks))
+          {
+            Output?.WarningIfNotValid();
+          }
+          Iterations -= 1;
+          if (Iterations <= 0) return false;
         }
-        return false;
       }
-      return true;
+      return checker.IsValid(rows, masks);
     }
 
     public bool BoardIsComplete(ushort[] masks)

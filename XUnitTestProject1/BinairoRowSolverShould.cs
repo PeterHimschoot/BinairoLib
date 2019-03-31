@@ -44,28 +44,65 @@ namespace BinairoLib.Tests
         //  0b1110_0111_0000_0000, // expectedMask
         //  true
         //};
-        // Before : XX001X1XX01100XX
         yield return new object[] {
-          0b0000_1010_0011_0000, // row
-          0b0011_1010_0111_1100, // mask
-          0b0100_1010_0011_0000, // expectedRow
-          0b0111_1110_0111_1100, // expectedMask
+          "XX001X1XX01100XX",
+          "X100101XX011001X",
           true
         };
+        yield return new object[] {
+          "0100101100110011",
+          "0100101100110011",
+          false
+        };
+        yield return new object[] {
+          "0010101X010X1X",
+          "0010101X010X1X",
+          false
+        };
+        yield return new object[] {
+        //  0 1 00   1101
+          "X0X1X00XXX1101",
+          "10011001001101",
+          true
+        };
+        yield return new object[] {
+          "X0XX101X011011",
+          "00101010011011",
+          true
+        };
+        yield return new object[] {
+        "X0XX1XXX110100",
+        "10XX1XX0110100",
+        true
+        };   
+        //yield return new object[] {
+        //"",
+        //"",
+        //true
+        //};
       }
     }
 
     [Theory]
     [MemberData(nameof(IncompleteRows))]
-    public void SolveRowsCorrectly(ushort row, ushort mask, ushort expectedRow, ushort expectedMask, bool expectedSolved)
+    public void SolveRowsCorrectly(
+      string rowString, 
+      string expectedString, 
+      bool expectedSolved)
     {
-      var sut = new BinairoRowSolver();
+      (ushort row, ushort mask, int size) =
+        rowString.ToRowWithMaskAndSize();
+      (ushort expectedRow, ushort expectedMask, int expectedSize) =
+        expectedString.ToRowWithMaskAndSize();
 
-      string problem = $"Trying to solve {row.ToBinaryString(mask)[0..14]}";
+      var sut = new BinairoRowSolver(size);
+      sut.Output = new BoardPrinter(output);
+
+      string problem = $"Trying to solve {row.ToBinaryString(mask)[0..size]}";
       output.WriteLine(problem);
 
-      bool solved = sut.Solve(ref row, ref mask, 14);
-      string solution = $"Got {row.ToBinaryString(mask)[0..14]}";
+      bool solved = sut.Solve(ref row, ref mask, size);
+      string solution = $"Got             {row.ToBinaryString(mask)[0..size]}";
       output.WriteLine(solution);
 
       Assert.Equal(expectedSolved, solved);
