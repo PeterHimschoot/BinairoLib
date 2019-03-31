@@ -13,9 +13,13 @@ namespace BinairoLib
   {
     public BinairoRowSolver()
     {
-      this.Add(new SingleHoleSolver());
       this.Add(new OpenStartDuosSolver());
       this.Add(new OpenEndDuosSolver());
+      this.Add(new HoleAtStartSolver());
+      this.Add(new HoleAtEndSolver());
+      this.Add(new SingleHoleSolver());
+      this.Add(new ZerosAllDoneSolver());
+      this.Add(new OnesAllDoneSolver());
       this.Add(new LastMissingSolver());
     }
 

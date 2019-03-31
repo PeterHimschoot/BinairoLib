@@ -5,7 +5,7 @@ using System.Text;
 namespace BinairoLib
 {
   /// <summary>
-  /// Look for open duo's like 00x or 11x, and add the missing
+  /// Look for open duo's like 00X or 11X, and add the missing X
   /// </summary>
   public class OpenEndDuosSolver : IRowSolver
   {
@@ -15,16 +15,15 @@ namespace BinairoLib
     {
       row &= mask; // make sure all zeros where mask is zero
       ushort originalMask = mask;
-      ushort twoZeros = 0b1100_0000_0000_0000;
       ushort twoOnes = 0b1100_0000_0000_0000;
       ushort twoMask = 0b0010_0000_0000_0000;
       for (int i = 0; i < size - 2; i += 1)
       {
         //First check if there is a missing element
-        if (((~mask & twoMask) == twoMask) && ((mask & twoZeros) == twoZeros))
+        if (((~mask & twoMask) == twoMask) && ((mask & twoOnes) == twoOnes))
         {
           // mask indicates there is nothing yet
-          if ((row & twoZeros) == 0)
+          if ((row & twoOnes) == 0)
           {
             // yes, two zero's in a row!
             row |= twoMask; // Fill in missing one
@@ -37,7 +36,6 @@ namespace BinairoLib
             mask |= twoMask;
           }
         }
-        twoZeros >>= 1;
         twoOnes >>= 1;
         twoMask >>= 1;
       }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -8,7 +6,7 @@ namespace BinairoLib.Tests
 {
   public class OpenEndDuoSolverShould
   {
-    private ITestOutputHelper output;
+    private readonly ITestOutputHelper output;
 
     public OpenEndDuoSolverShould(ITestOutputHelper output)
       => this.output = output;
@@ -17,39 +15,24 @@ namespace BinairoLib.Tests
     {
       get
       {
-        // Before: 00XX_XXXX_XXXX_XXXX
-        // After : 001X_XXXX_XXXX_XXXX
         yield return new object[] {
-          0b0000_0000_0000_0000, // row
-          0b1100_0000_0000_0000, // mask
-          0b0010_0000_0000_0000, // expectedRow
-          0b1110_0000_0000_0000, // expectedMask
+          "00XX_11XX_XXX0_0X",
+          "001X_110X_XXX0_01",
           true
         };
-        // Before: 11XX_XXXX_XXXX_XXXX
-        // After : 110X_XXXX_XXXX_XXXX
         yield return new object[] {
-          0b1100_0000_0000_0000, // row
-          0b1100_0000_0000_0000, // mask
-          0b1100_0000_0000_0000, // expectedRow
-          0b1110_0000_0000_0000, // expectedMask
+          "11XX_X00X_XXXX_XX",
+          "110X_X001_XXXX_XX",
           true
         };
-        // Before: 00XX_X00X_XXXX_XXXX
-        // After : 001X_X001_XXXX_XXXX
         yield return new object[] {
-          0b0000_0110_0000_0000, // row
-          0b1100_0110_0000_0000, // mask
-          0b0010_0110_0000_0000, // expectedRow
-          0b1110_0111_0000_0000, // expectedMask
+          "00XX_X00X_11XX_11",
+          "001X_X001_110X_11",
           true
         };
-        // Before : XX001X1XX01100XX
         yield return new object[] {
-          0b0000_1010_0011_0000, // row
-          0b0011_1010_0111_1100, // mask
-          0b0000_1010_0011_0000, // expectedRow
-          0b0011_1010_0111_1100, // expectedMask
+           "XX00_1X1X_XX11_00",
+           "XX00_1X1X_XX11_00",
           false
         };
       }
@@ -57,16 +40,20 @@ namespace BinairoLib.Tests
 
     [Theory]
     [MemberData(nameof(IncompleteRows))]
-    public void SolveDuosCorrectly(ushort row, ushort mask, ushort expectedRow, ushort expectedMask, bool expectedSolved)
+    public void SolveDuosCorrectly(string rowString, string expectedString, bool expectedSolved)
     {
+      (ushort row, ushort mask, int size) = 
+        rowString.ToRowWithMaskAndSize();
+      (ushort expectedRow, ushort expectedMask, int expectedSize) = 
+        expectedString.ToRowWithMaskAndSize();
       var sut = new OpenEndDuosSolver();
 
-      string problem = $"Trying to solve {row.ToBinaryString(mask)[0..8]}";
-      output.WriteLine(problem);
+      string problem = $"Trying to solve {row.ToBinaryString(mask)[0..size]}";
+      this.output.WriteLine(problem);
 
-      bool solved = sut.Solve(ref row, ref mask, 8);
-      string solution = $"Got {row.ToBinaryString(mask)[0..8]}";
-      output.WriteLine(solution);
+      bool solved = sut.Solve(ref row, ref mask, size);
+      string solution = $"Got {row.ToBinaryString(mask)[0..size]}";
+      this.output.WriteLine(solution);
 
       Assert.Equal(expectedSolved, solved);
       Assert.Equal(expectedRow, row);

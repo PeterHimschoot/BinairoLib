@@ -6,11 +6,11 @@ using Xunit.Abstractions;
 
 namespace BinairoLib.Tests
 {
- public class LastMissingSolverShould
+ public class ZerosAllDoneSolverShould
   {
     private ITestOutputHelper output;
 
-    public LastMissingSolverShould(ITestOutputHelper output)
+    public ZerosAllDoneSolverShould(ITestOutputHelper output)
       => this.output = output;
 
     public static IEnumerable<object[]> IncompleteRows
@@ -23,42 +23,10 @@ namespace BinairoLib.Tests
           true
         };
         yield return new object[] {
-          "1100011X",
-          "11000110",
-          true
-        };
-        yield return new object[] {
-          "1XX0011X",
-          "1XX00110",
-          true
-        };
-        yield return new object[] {
-          "1XXX1001",
-          "10101001",
-          true
-        };
-        yield return new object[] {
-          "10XXX010",
-          "10101010",
-          true
-        };
-        yield return new object[] {
-          "01XXX100110010",
+          "01XX0100110X10",
           "01101100110010",
           true
         };
-        yield return new object[] {
-          "X1010101010011",
-          "01010101010011",
-          true
-        };
-        yield return new object[] {
-          "X101X101010011",
-          "01010101010011",
-          true
-        };
-
-
       }
     }
 

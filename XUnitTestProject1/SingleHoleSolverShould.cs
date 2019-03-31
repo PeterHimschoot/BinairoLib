@@ -4,11 +4,11 @@ using Xunit.Abstractions;
 
 namespace BinairoLib.Tests
 {
-  public class OpenStartDuoSolverShould
+  public class SingleHoleSolverShould
   {
     private readonly ITestOutputHelper output;
 
-    public OpenStartDuoSolverShould(ITestOutputHelper output)
+    public SingleHoleSolverShould(ITestOutputHelper output)
       => this.output = output;
 
     public static IEnumerable<object[]> IncompleteRows
@@ -16,23 +16,18 @@ namespace BinairoLib.Tests
       get
       {
         yield return new object[] {
-          "X00X_XXXX_X11X_XX00",
-          "100X_XXXX_011X_X100",
+          "1X1X",
+          "101X",
           true
         };
         yield return new object[] {
-          "X11X_XX00_XXXX_XX11",
-          "011X_X100_XXXX_X011",
+          "0X0X",
+          "010X",
           true
         };
         yield return new object[] {
-          "00XX_X00X_XXXX_XX",
-          "00XX_100X_XXXX_XX",
-          true
-        };
-        yield return new object[] {
-          "XX00_1X1X_X01X_00",
-          "X100_1X1X_X011_00",
+          "0X0X_X1X1",
+          "010X_X101",
           true
         };
       }
@@ -40,19 +35,17 @@ namespace BinairoLib.Tests
 
     [Theory]
     [MemberData(nameof(IncompleteRows))]
-    public void SolveDuosCorrectly(string rowString, string expectedString, bool expectedSolved)
+    public void FillHoles(string rowString, string expectedString, bool expectedSolved)
     {
-      var (row, mask, size) = 
-        rowString.ToRowWithMaskAndSize();
-      var (expectedRow, expectedMask, expectedSize) =
-        expectedString.ToRowWithMaskAndSize();
-      var sut = new OpenStartDuosSolver();
+      var sut = new SingleHoleSolver();
+      var (row, mask, size) = rowString.ToRowWithMaskAndSize();
+      var (expectedRow, expectedMask, expectedSize) = expectedString.ToRowWithMaskAndSize();
 
       string problem = $"Trying to solve {row.ToBinaryString(mask)[0..size]}";
       this.output.WriteLine(problem);
 
       bool solved = sut.Solve(ref row, ref mask, size);
-      string solution = $"Got             {row.ToBinaryString(mask)[0..size]}";
+      string solution = $"Got {row.ToBinaryString(mask)[0..size]}";
       this.output.WriteLine(solution);
 
       Assert.Equal(expectedSolved, solved);

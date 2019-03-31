@@ -6,10 +6,10 @@ namespace BinairoLib
   public class BinairoBoardSolver
   {
     private readonly int completeMask;
-    private int size;
-    private BinairoBoardChecker checker;
-    private BinairoRowSolver rowSolver;
-    private MatrixFlipper flipper;
+    private readonly int size;
+    private readonly BinairoBoardChecker checker;
+    private readonly BinairoRowSolver rowSolver;
+    private readonly MatrixFlipper flipper;
     private ushort[] rows;
     private ushort[] masks;
 
@@ -29,11 +29,13 @@ namespace BinairoLib
       this.rows = rows;
       this.masks = masks;
 
-      var columns = new ushort[size];
-      var colMasks = new ushort[size];
+      ushort[] columns = new ushort[this.size];
+      ushort[] colMasks = new ushort[this.size];
 
+      //int iterations = 4;
       while (!BoardIsComplete(masks))
       {
+        Output.PrintBoard(rows, masks, this.size);
         int rowSolvers = 1;
         while (rowSolvers > 0)
         {
@@ -43,29 +45,38 @@ namespace BinairoLib
           while (solving)
           {
             solving = false;
-            for (int iRow = 0; iRow < size; iRow += 1)
+            for (int iRow = 0; iRow < this.size; iRow += 1)
             {
               Debug.WriteLine($"{iRow} - ROW {rows[iRow].ToBinaryString(masks[iRow])}");
-              solving = solving || rowSolver.Solve(ref rows[iRow], ref masks[iRow], size);
+              solving = solving || this.rowSolver.Solve(ref rows[iRow], ref masks[iRow], this.size);
             }
-            if (solving) rowSolvers += 1;
+            if (solving)
+            {
+              rowSolvers += 1;
+            }
           }
+          Output.PrintBoard(rows, masks, this.size);
           // Solve columns
-          flipper.Flip(rows, ref columns, size);
-          flipper.Flip(masks, ref colMasks, size);
+          this.flipper.Flip(rows, ref columns, this.size);
+          this.flipper.Flip(masks, ref colMasks, this.size);
           solving = true;
           while (solving)
           {
             solving = false;
-            for (int iRow = 0; iRow < size; iRow += 1)
+            for (int iRow = 0; iRow < this.size; iRow += 1)
             {
-              solving = solving || rowSolver.Solve(ref columns[iRow], ref colMasks[iRow], size);
+              solving = solving || this.rowSolver.Solve(ref columns[iRow], ref colMasks[iRow], this.size);
             }
-            if (solving) rowSolvers += 1;
+            if (solving)
+            {
+              rowSolvers += 1;
+            }
           }
-          flipper.Flip(columns, ref rows, size);
-          flipper.Flip(colMasks, ref masks, size);
-        Output.PrintBoard(rows, masks, size);
+          this.flipper.Flip(columns, ref rows, this.size);
+          this.flipper.Flip(colMasks, ref masks, this.size);
+          Output.PrintBoard(rows, masks, this.size);
+          //iterations -= 1;
+          //if (iterations <= 0) return false;
         }
         return false;
       }

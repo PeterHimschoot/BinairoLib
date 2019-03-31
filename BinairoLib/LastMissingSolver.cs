@@ -1,27 +1,97 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BinairoLib
+﻿namespace BinairoLib
 {
   /// <summary>
   /// Fill the one missing element
   /// </summary>
   public class LastMissingSolver : IRowSolver
   {
-    private BitCounter counter = new BitCounter();
+    private readonly BitCounter counter = new BitCounter();
 
     public bool Solve(ref ushort row, ref ushort mask, int size)
     {
-      int ones = counter.CountOnes(row, size, mask, includeHoles: true);
-      int zeros = counter.CountZeros(row, size, mask, includeHoles: true);
       ushort sizeMask = size.ToMask();
-      if (ones + zeros + 1 == size)
+      if (mask == sizeMask) return false; // finished
+      int ones = this.counter.CountOnes(row, size, mask, includeHoles: true);
+      int zeros = this.counter.CountZeros(row, size, mask, includeHoles: true);
+      int halfSize = size / 2;
+      if (zeros == halfSize)
+      {
+        // complete with '1's, skipping over holes
+        ushort patternMask = 0b1111_0000_0000_0000;
+        ushort patternMatch = 0b1001_0000_0000_0000;
+        ushort case1XX0 = 0b1000_0000_0000_0000;
+        ushort case0XX1 = 0b0001_0000_0000_0000;
+        ushort missingOne = 0b1000_0000_0000_0000;
+        for (int i = 0; i < size; i += 1)
+        {
+          if ((mask & patternMask) == patternMatch)
+          {
+            ushort pattern = (ushort)(row & patternMatch);
+            if (pattern == case1XX0 || pattern == case0XX1)
+            {
+              i += 3;
+              patternMask >>= 4;
+              patternMatch >>= 4;
+              case1XX0 >>= 4;
+              case0XX1 >>= 4;
+              missingOne >>= 4;
+              continue;
+            }
+          }
+          else
+          {
+            if ((~mask & missingOne) == missingOne)
+            {
+              row |= missingOne;
+              mask |= missingOne;
+        return true;
+            }
+            patternMask >>= 1;
+            patternMatch >>= 1;
+            case1XX0 >>= 1;
+            case0XX1 >>= 1;
+            missingOne >>= 1;
+          }
+        }
+      }
+      else if (ones == halfSize)
+      {
+        // complete with '0's, skipping over holes
+        ushort patternMask = 0b1111_0000_0000_0000;
+        ushort patternMatch = 0b1001_0000_0000_0000;
+        ushort case1XX0 = 0b1000_0000_0000_0000;
+        ushort case0XX1 = 0b0001_0000_0000_0000;
+        ushort missingOne = 0b1000_0000_0000_0000;
+        for (int i = 0; i < size - 4; i += 1)
+        {
+          if ((mask & patternMask) == patternMatch)
+          {
+            ushort pattern = (ushort)(row & patternMatch);
+            if (pattern == case1XX0 || pattern == case0XX1)
+            {
+            }
+            else
+            {
+              if ((~mask & missingOne) == missingOne)
+              {
+                mask |= missingOne;
+              }
+            }
+          }
+          patternMask >>= 1;
+          patternMatch >>= 1;
+          case1XX0 >>= 1;
+          case0XX1 >>= 1;
+          missingOne >>= 1;
+        }
+        return true;
+      }
+      else if (ones + zeros + 1 == size)
       {
         // we have a match, now find the missing 1-size hole
         ushort missingPattern = 0b1010_0000_0000_0000;
         ushort missingMask = 0b1110_0000_0000_0000;
-        for (int i = 0; i < size-1; i += 1)
+        for (int i = 0; i < size - 1; i += 1)
         {
           if ((mask & missingMask) == missingPattern)
           {
@@ -38,7 +108,7 @@ namespace BinairoLib
           missingMask = (ushort)((missingMask >> 1) & sizeMask);
         }
       }
-      else if (ones + 1 == size / 2)
+      else if (ones + 1 == halfSize)
       {
         // Look for a 3-size hole, with zeros at the edge
         ushort missingPattern = 0b1000_1000_0000_0000;
@@ -47,7 +117,7 @@ namespace BinairoLib
         {
           if ((mask & missingMask) == missingPattern)
           {
-            if ((row & missingPattern) == missingPattern)
+            //if ((row & missingPattern) == missingPattern)
             {
               ushort updateRow = (ushort)(0b0010_0000_0000_0000 >> i);
               row |= updateRow;
@@ -60,7 +130,7 @@ namespace BinairoLib
           missingMask >>= 1;
         }
       }
-      else if (zeros + 1 == size / 2)
+      else if (zeros + 1 == halfSize)
       {
         // Look for a 3-size hole, with ones at the edge
         ushort missingPattern = 0b1000_1000_0000_0000;
@@ -69,7 +139,7 @@ namespace BinairoLib
         {
           if ((mask & missingMask) == missingPattern)
           {
-            if ((row & missingPattern) == 0b0000_0000_0000_0000)
+            //if ((row & missingPattern) == missingPattern)
             {
               ushort updateRow = (ushort)(0b0101_0000_0000_0000 >> i);
               row |= updateRow;

@@ -18,12 +18,13 @@ namespace BinairoLib
       ushort Ones = 0b1010_0000_0000_0000;
       ushort Zeros = 0b0000_0000_0000_0000;
       ushort UpdateMask = 0b0100_0000_0000_0000;
-
-      for(int i = 0; i < size; i += 1)
+      // check for hole in middle
+      for (int i = 0; i < size; i += 1)
       {
         // mask = 101
         // Ones = 101
-        if( (mask & Pattern) == Ones) {
+        if ((mask & Pattern) == Ones)
+        {
           if ((row & Pattern) == Ones)
           {
             // put 0 in the middle
