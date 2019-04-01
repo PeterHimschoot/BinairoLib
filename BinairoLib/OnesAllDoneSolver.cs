@@ -28,12 +28,12 @@
             ushort pattern = (ushort)(row & patternMatch);
             if (pattern == case1XX0 || pattern == case0XX1)
             { // skip hole
-              i += 3;
-              patternMask >>= 4;
-              patternMatch >>= 4;
-              case1XX0 >>= 4;
-              case0XX1 >>= 4;
-              missingOne >>= 4;
+              i += 2;
+              patternMask >>= 3;
+              patternMatch >>= 3;
+              case1XX0 >>= 3;
+              case0XX1 >>= 3;
+              missingOne >>= 3;
               continue;
             }
           }
