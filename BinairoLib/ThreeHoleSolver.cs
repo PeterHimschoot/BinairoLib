@@ -20,13 +20,17 @@
         ushort missingMask = 0b1111_1000_0000_0000;
         for (int i = 0; i < size - 5; i += 1)
         {
-          if ((mask & missingMask) == missingPattern)
+          // row should have same bit at begin & end of pattern
+          if ((row & missingPattern) == missingPattern || (row & missingPattern) == 0)
           {
-            ushort updateRow = (ushort)(0b0010_0000_0000_0000 >> i);
-            row |= updateRow;
-            ushort updateMask = (ushort)(0b0111_0000_0000_0000 >> i);
-            mask |= updateMask;
-            return true;
+            if ((mask & missingMask) == missingPattern)
+            {
+              ushort updateRow = (ushort)(0b0010_0000_0000_0000 >> i);
+              row |= updateRow;
+              ushort updateMask = (ushort)(0b0111_0000_0000_0000 >> i);
+              mask |= updateMask;
+              return true;
+            }
           }
           missingPattern >>= 1;
           missingMask >>= 1;
@@ -39,13 +43,17 @@
         ushort missingMask = 0b1111_1000_0000_0000;
         for (int i = 0; i < size - 5; i += 1)
         {
-          if ((mask & missingMask) == missingPattern)
+          // row should have same bit at begin & end of pattern
+          if ((row & missingPattern) == missingPattern || (row & missingPattern) == 0)
           {
-            ushort updateRow = (ushort)(0b0101_0000_0000_0000 >> i);
-            row |= updateRow;
-            ushort updateMask = (ushort)(0b0111_0000_0000_0000 >> i);
-            mask |= updateMask;
-            return true;
+            if ((mask & missingMask) == missingPattern)
+            {
+              ushort updateRow = (ushort)(0b0101_0000_0000_0000 >> i);
+              row |= updateRow;
+              ushort updateMask = (ushort)(0b0111_0000_0000_0000 >> i);
+              mask |= updateMask;
+              return true;
+            }
           }
           missingPattern >>= 1;
           missingMask >>= 1;

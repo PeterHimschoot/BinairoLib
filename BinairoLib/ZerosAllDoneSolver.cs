@@ -38,19 +38,16 @@
               continue;
             }
           }
-          else
+          if ((~mask & missingOne) == missingOne)
           {
-            if ((~mask & missingOne) == missingOne)
-            {
-              row |= missingOne;
-              mask |= missingOne;
-            }
-            patternMask >>= 1;
-            patternMatch >>= 1;
-            case1XX0 >>= 1;
-            case0XX1 >>= 1;
-            missingOne >>= 1;
+            row |= missingOne;
+            mask |= missingOne;
           }
+          patternMask >>= 1;
+          patternMatch >>= 1;
+          case1XX0 >>= 1;
+          case0XX1 >>= 1;
+          missingOne >>= 1;
         }
       }
       return originalMask != mask;

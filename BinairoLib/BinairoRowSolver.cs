@@ -5,10 +5,7 @@ using System.Text;
 
 namespace BinairoLib
 {
-  public interface IRowSolver
-  {
-    bool Solve(ref ushort row, ref ushort mask, int size);
-  }
+
 
   public class BinairoRowSolver : IRowSolver
   {

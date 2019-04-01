@@ -9,17 +9,20 @@ namespace BinairoLib
     private readonly int size;
     private readonly BinairoBoardChecker checker;
     private readonly BinairoRowSolver rowSolver;
+    private readonly IBoardSolver boardSolver;
     private readonly MatrixFlipper flipper;
+
     public int Iterations { get; set; } = int.MaxValue;
 
     public IOutputHelper Output { get; set; }
 
-    public BinairoBoardSolver(BinairoBoardChecker checker, BinairoRowSolver rowSolver, MatrixFlipper flipper, int size)
+    public BinairoBoardSolver(BinairoBoardChecker checker, BinairoRowSolver rowSolver, IBoardSolver boardSolver, MatrixFlipper flipper, int size)
     {
       this.completeMask = size.ToMask();
       this.size = size;
       this.checker = checker;
       this.rowSolver = rowSolver;
+      this.boardSolver = boardSolver;
       this.flipper = flipper;
     }
 
@@ -28,8 +31,8 @@ namespace BinairoLib
       ushort[] columns = new ushort[this.size];
       ushort[] colMasks = new ushort[this.size];
 
-      while (!BoardIsComplete(masks))
-      {
+      //while (!BoardIsComplete(masks))
+      //{
         int rowSolvers = 1;
         while (rowSolvers > 0)
         {
@@ -50,6 +53,7 @@ namespace BinairoLib
               rowSolvers += 1;
             }
           }
+          boardSolver.Solve(rows, masks, size);
           Output?.PrintBoard(rows, masks, this.size);
           // Solve columns
           this.flipper.Flip(rows, ref columns, this.size);
@@ -68,6 +72,7 @@ namespace BinairoLib
               rowSolvers += 1;
             }
           }
+          boardSolver.Solve(columns, colMasks, size);
           Output?.PrintBoard(columns, colMasks, this.size, horizontal: false);
           this.flipper.Flip(columns, ref rows, this.size);
           this.flipper.Flip(colMasks, ref masks, this.size);
@@ -78,8 +83,8 @@ namespace BinairoLib
           Iterations -= 1;
           if (Iterations <= 0) return false;
         }
-      }
-      return checker.IsValid(rows, masks);
+      //}
+      return checker.IsValid(rows, masks) && BoardIsComplete(masks);
     }
 
     public bool BoardIsComplete(ushort[] masks)

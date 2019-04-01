@@ -6,7 +6,7 @@ using Xunit.Abstractions;
 
 namespace BinairoLib.Tests
 {
- public class OnesAllDoneSolverShould
+  public class OnesAllDoneSolverShould
   {
     private ITestOutputHelper output;
 
@@ -40,6 +40,11 @@ namespace BinairoLib.Tests
         yield return new object[] {
           "01XX0110110X1X",
           "01XX0110110010",
+          true
+        };
+        yield return new object[] {
+        "1001101XX10011",
+        "10011010010011",
           true
         };
       }

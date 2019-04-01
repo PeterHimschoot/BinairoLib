@@ -38,10 +38,19 @@ namespace BinairoLib.Tests
     {
       var sut = new BitCounter();
       int actual = sut.CountOnes(
-        row:  0b0100_0101_1001_0000,
+        row: 0b0100_0101_1001_0000,
         size: 14,
         mask: 0b1100_1111_1111_0100,
         includeHoles: true);
+      Assert.Equal(6, actual);
+    }
+
+    [Fact]
+    public void CountWithPatternAndHoles2()
+    {
+      var (row, mask, size) = "1100110XXX0XX1".ToRowWithMaskAndSize();
+      var sut = new BitCounter();
+      int actual = sut.CountOnes(row, size, mask, includeHoles: true);
       Assert.Equal(6, actual);
     }
   }

@@ -32,6 +32,16 @@ namespace BinairoLib.Tests
           "01101100110010",
           true
         };
+        yield return new object[] {
+          "011001XXX01001",
+          "011001XXX01001",
+          false
+        };
+        yield return new object[] {
+          "1100110XXX0XX1",
+          "11001100100XX1",
+          true
+        };
       }
     }
 

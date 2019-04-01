@@ -55,7 +55,7 @@ namespace BinairoLib
     public int CountHoles(ushort row, ushort mask, int size)
     {
       int holes = 0;
-      size -= 4;
+      size -= 3;
       ushort patternMask = 0b1111_0000_0000_0000;
       ushort patternMatch = 0b1001_0000_0000_0000;
       ushort case1XX0 = 0b1000_0000_0000_0000;
