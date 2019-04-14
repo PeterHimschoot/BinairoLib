@@ -5,7 +5,13 @@ VisualStudioVersion = 16.0.28516.95
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinairoLib", "BinairoLib\BinairoLib.csproj", "{3DBA4BCE-38C3-48DB-9BDA-ED77E5B157A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinairoLib.Tests", "XUnitTestProject1\BinairoLib.Tests.csproj", "{3B0F0E1A-6A46-4BDE-8170-312C40940B16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinairoLib.Tests", "XUnitTestProject1\BinairoLib.Tests.csproj", "{3B0F0E1A-6A46-4BDE-8170-312C40940B16}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A366F446-C21B-4C92-B65A-B8E162FDF30F}"
+	ProjectSection(SolutionItems) = preProject
+		TextFile1.txt = TextFile1.txt
+		TextFile2.txt = TextFile2.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

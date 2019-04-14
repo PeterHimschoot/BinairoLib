@@ -26,6 +26,8 @@ namespace BinairoLib
       this.Add(new ZerosAllDoneSolver(bitCounter));
       this.Add(new OnesAllDoneSolver(bitCounter));
       this.Add(new ThreeHoleSolver(bitCounter));
+      this.Add(new FourHoleSolver(bitCounter));
+      //this.Add(new FiveHoleSolver(bitCounter));
     }
 
     private List<IRowSolver> solvers = new List<IRowSolver>();

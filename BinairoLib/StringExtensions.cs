@@ -24,7 +24,7 @@ namespace BinairoLib
         }
         else
         {
-          bob.Append(" ");
+          bob.Append("X");
         }
         nr <<= 1;
         valid <<= 1;

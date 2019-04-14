@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -9,8 +7,8 @@ namespace BinairoLib.Tests
 {
   public class BinairoBoardSolverShould : IClassFixture<Valid14x14>
   {
-    private Valid14x14 validRows;
-    private ITestOutputHelper output;
+    private readonly Valid14x14 validRows;
+    private readonly ITestOutputHelper output;
 
     public BinairoBoardSolverShould(Valid14x14 validRows, ITestOutputHelper output)
     {
@@ -44,7 +42,7 @@ namespace BinairoLib.Tests
           int.MaxValue
         };
         yield return new object[]
-{
+        {
           new string[]
           {
             "XX00XXX_XXXX00X",
@@ -62,8 +60,134 @@ namespace BinairoLib.Tests
             "XXX1XXX_XX1XX00",
             "XXXXXXX_XXXXXXX",
           },
-          9
-};
+          int.MaxValue
+        };
+        yield return new object[]
+        {
+          new string[]
+          {
+            "1X00XX0_XX1XXX0",
+            "1XXXX0X_X1XXXX0",
+            "XX00XXX_11XXXXX",
+            "XX0X1XX_XXX1XX1",
+            "XXXXX0X_1XXX0XX",
+            "XXXXXXX_XX1XXXX",
+            "XX0XXXX_XXXXXXX",
+            "X0XXXXX_0XX1X0X",
+            "XXXXXX0_X1XXXX1",
+            "XXX0XXX_XXX0XXX",
+            "XXXXXXX_XX1XX0X",
+            "XXX1X1X_0XXXXXX",
+            "1X0XX11_01XX00X",
+            "XX1XXXX_X1X0X1X",
+          },
+          int.MaxValue
+        };
+        yield return new object[]
+        {
+          new string[]
+          {
+            "XX0XXX0_0XXXX00",
+            "X1XX0X0_0X1XXXX",
+            "XXXX0XX_XXXX11X",
+            "XX0XXXX_XXXXXXX",
+            "XXXXXXX_XXX0XXX",
+            "0XXXXXX_XX1XX0X",
+            "XXXXXXX_0XX1X0X",
+            "0X0XX0X_XXXXXXX",
+            "XXXXXXX_1X1XXX0",
+            "X0XXXXX_X0XXXXX",
+            "0XXXXXX_XXXX0XX",
+            "01XXXXX_01XXXX0",
+            "XX00XXX_XXXX11X",
+            "0XXXXXX_1X00XXX",
+          },
+          int.MaxValue
+        };
+        yield return new object[]
+        {
+          new string[]
+          {
+            "XXXX0XX_0XXX00X",
+            "X0XXXXX_0XXX0XX",
+            "X0XX1XX_XXXXXXX",
+            "1XXXXXX_XX00X1X",
+            "X11XXX0_XXXXXXX",
+            "XXXXXXX_XXXX0XX",
+            "XXX1XXX_1XXXX1X",
+            "1X0XXXX_X0XXXXX",
+            "X1X0X00_XXXXXXX",
+            "1XXXXXX_XXXXXXX",
+            "1X0X0XX_XXXXX1X",
+            "XXXXXXX_0XXX01X",
+            "0XX1XXX_XXXX0XX",
+            "X1XXX1X_0XX1XXX",
+          },
+          int.MaxValue
+        };
+        //yield return new object[]
+        //{
+        //  new string[]
+        //  {
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //  },
+        //  int.MaxValue
+        //};
+        //yield return new object[]
+        //{
+        //  new string[]
+        //  {
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //  },
+        //  int.MaxValue
+        //};
+        //yield return new object[]
+        //{
+        //  new string[]
+        //  {
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //    "XXXXXXX_XXXXXXX",
+        //  },
+        //  int.MaxValue
+        //};
       }
     }
 
@@ -71,24 +195,26 @@ namespace BinairoLib.Tests
     [MemberData(nameof(IncompleteBoards))]
     public void SolveIncompleteBoards(string[] rowStrings, int iterations)
     {
-      var coll = rowStrings.Select(rowString => rowString.ToRowWithMaskAndSize());
-      var rows = coll.Select(trio => trio.Item1).ToArray();
-      var masks = coll.Select(trio => trio.Item2).ToArray();
+      IEnumerable<(ushort, ushort, int)> coll = rowStrings.Select(rowString => rowString.ToRowWithMaskAndSize());
+      ushort[] rows = coll.Select(trio => trio.Item1).ToArray();
+      ushort[] masks = coll.Select(trio => trio.Item2).ToArray();
       int size = coll.First().Item3;
 
-      BoardPrinter printer = new BoardPrinter(output);
+      var printer = new BoardPrinter(this.output);
       printer.PrintBoard(rows, masks, size);
       var rowChecker = new BinairoRowChecker(this.validRows, size);
       var flipper = new MatrixFlipper();
       var checker = new BinairoBoardChecker(rowChecker, flipper, size);
       var rowSolver = new BinairoRowSolver(size);
       var boardSolver = new DuplicateRowSolver(size, new BitCounter());
-      var solver = new BinairoBoardSolver(checker, rowSolver, boardSolver, flipper, size);
-      solver.Output = printer;
-      solver.Iterations = iterations;
+      var solver = new BinairoBoardSolver(checker, rowSolver, boardSolver, flipper, size)
+      {
+        Output = printer,
+        Iterations = iterations
+      };
       //rowSolver.RowChecker = rowChecker;
       //rowSolver.Output = printer;
-      var solved = solver.Solve(rows, masks);
+      bool solved = solver.Solve(rows, masks);
       Assert.True(solved);
     }
 

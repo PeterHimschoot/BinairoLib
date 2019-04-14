@@ -35,6 +35,11 @@ namespace BinairoLib.Tests
           "X100101XX011001X",
           true
         };
+        yield return new object[] {
+         "10XXX010X10010",
+         "10XXX010010010",
+         true
+        };
       }
     }
 
@@ -43,8 +48,8 @@ namespace BinairoLib.Tests
     public void FillHoles(string rowString, string expectedString, bool expectedSolved)
     {
       var sut = new SingleHoleSolver();
-      var (row, mask, size) = rowString.ToRowWithMaskAndSize();
-      var (expectedRow, expectedMask, expectedSize) = expectedString.ToRowWithMaskAndSize();
+      (ushort row, ushort mask, int size) = rowString.ToRowWithMaskAndSize();
+      (ushort expectedRow, ushort expectedMask, int expectedSize) = expectedString.ToRowWithMaskAndSize();
 
       string problem = $"Trying to solve {row.ToBinaryString(mask)[0..size]}";
       this.output.WriteLine(problem);
